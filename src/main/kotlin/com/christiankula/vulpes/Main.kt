@@ -1,7 +1,9 @@
-import cli.Cli
+package com.christiankula.vulpes
 import com.beust.jcommander.JCommander
 import com.beust.jcommander.ParameterException
-import manga.Source
+
+import com.christiankula.vulpes.cli.Cli
+import com.christiankula.vulpes.manga.Source
 
 val cli = Cli()
 
