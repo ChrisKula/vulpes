@@ -4,6 +4,7 @@ import com.christiankula.vulpes.manga.Chapter
 import com.christiankula.vulpes.manga.Manga
 import com.christiankula.vulpes.net.connection.ConnectionFactory
 import com.christiankula.vulpes.utils.StringUtils
+import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 import org.jsoup.parser.Parser
 import java.io.IOException
@@ -17,6 +18,7 @@ class MangaFoxReleaseFetcher : ReleaseFetcher() {
     private val BASE_MANGA_URL = "http://mangafox.me/manga/%s"
     private val BASE_RSS_URL = "http://mangafox.me/rss/%s.xml"
 
+    private val JSOUP_HTML_CONNECTION = ConnectionFactory.createJsoupConnection(BASE_MANGAFOX_URL, Parser.htmlParser())
     private val JSOUP_XML_CONNECTION = ConnectionFactory.createJsoupConnection(BASE_MANGAFOX_URL, Parser.xmlParser())
 
     override fun fetchReleases(manga: Manga): Manga {
@@ -61,7 +63,19 @@ class MangaFoxReleaseFetcher : ReleaseFetcher() {
                 chapterNumber = matcher.group(1).replaceFirst("^0+(?!$)".toRegex(), "")
             }
 
-            updatedManga.chapters.add(Chapter(volumeNumber, chapterNumber, 0, element.getElementsByTag("link")[0].ownText()))
+            var chapter = Chapter(volumeNumber, chapterNumber, 0, element.getElementsByTag("link")[0].ownText())
+
+            if (!manga.chapters.contains(chapter)) {
+                chapter = chapter.copy(pageCount = fetchPageCount(chapter))
+                if (chapter.pageCount > 0) {
+                    updatedManga.chapters.add(chapter)
+                }
+            }
+
+            // Because of how MangaFox handles incomings requests incoming in a short period,
+            // fetching page counts can't be parallelized and a small delay is necessary.
+            // Same applies for page downloading, thus making MangaFox crawling very slow
+            Thread.sleep(150)
         }
 
         return updatedManga
@@ -69,5 +83,27 @@ class MangaFoxReleaseFetcher : ReleaseFetcher() {
 
     fun transformToMangaFoxRssName(mangaName: String): String {
         return StringUtils.stripAccents(mangaName).replace(" ".toRegex(), "_").replace("[^0-9a-zA-Z_]".toRegex(), "").toLowerCase()
+    }
+
+    private fun fetchPageCount(chapter: Chapter): Int {
+        val chapterFirstPage: Document
+        try {
+            chapterFirstPage = JSOUP_HTML_CONNECTION.url(chapter.url).get()
+        } catch (e1: IOException) {
+            val error = "Couldn't retrieve the number of pages of this chapter : " + chapter.chapterNumber
+            System.err.println("[ERROR] " + error)
+            return -1
+        }
+
+        val e = chapterFirstPage.getElementsByTag("option")
+        val pagesCount = e.size / 2 - 1
+
+        if (pagesCount <= 0) {
+            val error = "Couldn't retrieve the number of pages of this chapter : " + chapter.chapterNumber + ". Keep in mind in can be a problem on mangafox.me's side."
+            println("[ERROR] " + error)
+            return -1
+        } else {
+            return pagesCount
+        }
     }
 }
