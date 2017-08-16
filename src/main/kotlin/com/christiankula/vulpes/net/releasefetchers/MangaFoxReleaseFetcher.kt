@@ -81,8 +81,8 @@ class MangaFoxReleaseFetcher : ReleaseFetcher() {
         return updatedManga
     }
 
-    fun transformToMangaFoxRssName(mangaName: String): String {
-        return StringUtils.stripAccents(mangaName).replace(" ".toRegex(), "_").replace("[^0-9a-zA-Z_]".toRegex(), "").toLowerCase()
+    private fun transformToMangaFoxRssName(mangaName: String): String {
+        return StringUtils.stripAccents(mangaName).replace(" ".toRegex(), "_").toLowerCase()
     }
 
     private fun fetchPageCount(chapter: Chapter): Int {
