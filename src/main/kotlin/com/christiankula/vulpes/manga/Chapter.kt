@@ -30,4 +30,34 @@ data class Chapter(val associatedVolume: String, val chapterNumber: String, val 
 
         return diff
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this == other) {
+            return true
+        }
+
+        if (other == null) {
+            return false
+        }
+
+        val otherChapter = other as Chapter
+
+        if (associatedVolume != otherChapter.associatedVolume) {
+            return false
+        }
+
+        if (chapterNumber != otherChapter.chapterNumber) {
+            return false
+        }
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        val prime = 31
+        var result = 1
+        result = prime * result + associatedVolume.hashCode()
+        result = prime * result + chapterNumber.hashCode()
+        return result
+    }
 }
