@@ -24,6 +24,7 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
     compile 'com.beust:jcommander:1.72'
     compile group: 'org.jsoup', name: 'jsoup', version: '1.10.3'
+    compile group: 'commons-io', name: 'commons-io', version: '2.5'
 }
 
 compileKotlin {
