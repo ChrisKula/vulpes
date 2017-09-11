@@ -8,7 +8,7 @@ class StringUtils {
          * Keeps only alphabetical characters, numbers, spaces and underscores
          */
         fun clean(str: String): String {
-            return str.replace("[^0-9a-zA-Z_ ]".toRegex(), "")
+            return str.replace("_", " ").replace("[^0-9a-zA-Z ]".toRegex(), "")
         }
 
         /**
