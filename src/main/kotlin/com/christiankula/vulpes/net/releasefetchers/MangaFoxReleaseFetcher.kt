@@ -1,7 +1,7 @@
 package com.christiankula.vulpes.net.releasefetchers
 
-import com.christiankula.vulpes.manga.Chapter
-import com.christiankula.vulpes.manga.Manga
+import com.christiankula.vulpes.manga.models.Chapter
+import com.christiankula.vulpes.manga.models.Manga
 import com.christiankula.vulpes.net.connection.ConnectionFactory
 import com.christiankula.vulpes.utils.StringUtils
 import org.jsoup.nodes.Document

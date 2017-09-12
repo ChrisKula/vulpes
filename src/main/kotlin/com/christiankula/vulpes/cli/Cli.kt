@@ -2,7 +2,7 @@ package com.christiankula.vulpes.cli
 
 import com.beust.jcommander.IStringConverter
 import com.beust.jcommander.Parameter
-import com.christiankula.vulpes.manga.Source
+import com.christiankula.vulpes.manga.models.Source
 
 
 class Cli {

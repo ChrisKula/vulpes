@@ -3,7 +3,7 @@ import com.beust.jcommander.JCommander
 import com.beust.jcommander.ParameterException
 
 import com.christiankula.vulpes.cli.Cli
-import com.christiankula.vulpes.manga.Source
+import com.christiankula.vulpes.manga.models.Source
 
 val cli = Cli()
 

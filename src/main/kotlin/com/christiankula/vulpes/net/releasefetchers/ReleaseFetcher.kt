@@ -1,6 +1,6 @@
 package com.christiankula.vulpes.net.releasefetchers
 
-import com.christiankula.vulpes.manga.Manga
+import com.christiankula.vulpes.manga.models.Manga
 
 abstract class ReleaseFetcher {
 

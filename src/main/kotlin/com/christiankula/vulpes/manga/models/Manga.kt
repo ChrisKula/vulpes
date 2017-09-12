@@ -1,4 +1,4 @@
-package com.christiankula.vulpes.manga
+package com.christiankula.vulpes.manga.models
 
 import java.util.*
 

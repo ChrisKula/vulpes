@@ -1,8 +1,8 @@
 package com.christiankula.vulpes.net.downloaders
 
 import com.christiankula.vulpes.file.filters.ImageFileFilter
-import com.christiankula.vulpes.manga.Chapter
-import com.christiankula.vulpes.manga.Manga
+import com.christiankula.vulpes.manga.models.Chapter
+import com.christiankula.vulpes.manga.models.Manga
 import org.apache.commons.io.FileUtils
 import java.io.File
 import java.io.IOException

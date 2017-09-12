@@ -1,4 +1,4 @@
-package com.christiankula.vulpes.manga
+package com.christiankula.vulpes.manga.models
 
 data class Chapter(val associatedVolume: String, val chapterNumber: String, val pageCount: Int, val url: String) : Comparable<Chapter> {
     val VOLUME_NOT_AVAILABLE = "NA"
