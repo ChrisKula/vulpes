@@ -7,7 +7,7 @@ import com.christiankula.vulpes.manga.Source
 
 class Cli {
     @Parameter(description = "Name of the manga to download")
-    lateinit var mangaName: String
+    var mangaName: String? = null
 
     @Parameter(names = arrayOf("--volume", "-v"), description = "Specify the volume to " +
             "download. Accepted values : 0..* | TBD | NA", order = 1)
