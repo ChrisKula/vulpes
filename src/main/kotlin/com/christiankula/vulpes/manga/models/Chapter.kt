@@ -1,19 +1,23 @@
 package com.christiankula.vulpes.manga.models
 
-data class Chapter(val associatedVolume: String, val chapterNumber: String, val pageCount: Int, val url: String) : Comparable<Chapter> {
-    val VOLUME_NOT_AVAILABLE = "NA"
-    val VOLUME_TO_BE_DETERMINED = "TBD"
+import com.google.gson.annotations.SerializedName
+
+const val VOLUME_NOT_AVAILABLE = "NA"
+
+const val VOLUME_TO_BE_DETERMINED = "TBD"
+
+data class Chapter(@SerializedName("volume") val associatedVolume: String, @SerializedName("chapter") val chapterNumber: String, val pageCount: Int, val url: String) : Comparable<Chapter> {
 
     private fun getVolumeValue(volume: String): Double {
-        when (volume) {
+        return when (volume) {
             VOLUME_NOT_AVAILABLE -> {
-                return Double.MAX_VALUE
+                Double.MAX_VALUE
             }
             VOLUME_TO_BE_DETERMINED -> {
-                return Double.MAX_VALUE - 1
+                Double.MAX_VALUE - 1
             }
             else -> {
-                return volume.toDouble()
+                volume.toDouble()
             }
         }
     }
@@ -32,7 +36,7 @@ data class Chapter(val associatedVolume: String, val chapterNumber: String, val 
     }
 
     override fun equals(other: Any?): Boolean {
-        if (this == other) {
+        if (this === other) {
             return true
         }
 
