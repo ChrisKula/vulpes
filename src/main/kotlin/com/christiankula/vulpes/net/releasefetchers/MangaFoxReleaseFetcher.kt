@@ -22,8 +22,8 @@ class MangaFoxReleaseFetcher : ReleaseFetcher() {
     private val JSOUP_XML_CONNECTION = ConnectionFactory.createJsoupConnection(BASE_MANGAFOX_URL, Parser.xmlParser())
 
     override fun fetchReleases(manga: Manga): Manga {
-        val updatedManga = manga.copy(name = StringUtils.clean(manga.name.capitalize()),
-                url = String.format(BASE_MANGA_URL, transformToMangaFoxRssName(manga.name)))
+        val updatedManga = manga.copy(url = String.format(BASE_MANGA_URL,
+                transformToMangaFoxRssName(manga.name)))
 
         val rssUrl = String.format(BASE_RSS_URL, transformToMangaFoxRssName(manga.name))
 
@@ -37,7 +37,7 @@ class MangaFoxReleaseFetcher : ReleaseFetcher() {
             System.exit(1)
         } catch (ioobe: IndexOutOfBoundsException) {
             System.err.println("[ERROR] The manga " + manga.name
-                    + " does not exist (or it is refered differently by MangaFox)")
+                    + " does not exist (or it is referred differently by MangaFox)")
             System.exit(1)
         }
 
