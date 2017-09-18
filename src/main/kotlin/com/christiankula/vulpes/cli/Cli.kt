@@ -6,7 +6,7 @@ import com.christiankula.vulpes.manga.models.Source
 
 
 class Cli {
-    @Parameter(description = "Name of the manga to download")
+    @Parameter(description = "Name of the manga to download", required = true)
     var mangaName: String? = null
 
     @Parameter(names = arrayOf("--volume", "-v"), description = "Specify the volume to " +
@@ -27,7 +27,7 @@ class Cli {
     var version = false
 
     @Parameter(names = arrayOf("--help", "-h"), help = true, description = "Display help " +
-            "informations about Vulpes", order = 5)
+            "information about Vulpes", order = 5)
     var help: Boolean = false
 
     class SourceConverter : IStringConverter<Source> {
