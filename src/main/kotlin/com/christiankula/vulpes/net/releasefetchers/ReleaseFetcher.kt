@@ -1,6 +1,7 @@
 package com.christiankula.vulpes.net.releasefetchers
 
-import com.christiankula.vulpes.manga.Manga
+import com.christiankula.vulpes.manga.models.Manga
+import com.christiankula.vulpes.manga.models.Source
 
 abstract class ReleaseFetcher {
 
@@ -9,4 +10,18 @@ abstract class ReleaseFetcher {
      * @return the given manga with its chapters and URL updated
      */
     abstract fun fetchReleases(manga: Manga): Manga
+
+    companion object {
+        fun fromSource(source: Source): ReleaseFetcher {
+
+            when (source) {
+                Source.JAPSCAN -> {
+                    throw NotImplementedError("No release fetcher implemented for Japscan source")
+                }
+                else -> {
+                    return MangaFoxReleaseFetcher()
+                }
+            }
+        }
+    }
 }

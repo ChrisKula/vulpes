@@ -1,8 +1,9 @@
 package com.christiankula.vulpes.net.downloaders
 
 import com.christiankula.vulpes.file.filters.ImageFileFilter
-import com.christiankula.vulpes.manga.Chapter
-import com.christiankula.vulpes.manga.Manga
+import com.christiankula.vulpes.manga.models.Chapter
+import com.christiankula.vulpes.manga.models.Manga
+import com.christiankula.vulpes.manga.models.Source
 import org.apache.commons.io.FileUtils
 import java.io.File
 import java.io.IOException
@@ -19,6 +20,20 @@ abstract class Downloader {
 
     private val THREAD_POOL_SIZE: Int = Runtime.getRuntime().availableProcessors() - 1
     private val executorService: ExecutorService = Executors.newFixedThreadPool(THREAD_POOL_SIZE)
+
+    companion object {
+        fun fromSource(source: Source): Downloader {
+
+            when (source) {
+                Source.JAPSCAN -> {
+                    throw NotImplementedError("No release fetcher implemented for Japscan source")
+                }
+                else -> {
+                    return MangaFoxDownloader()
+                }
+            }
+        }
+    }
 
     fun downloadManga(manga: Manga): Boolean {
         val chaptersToDownload = getChaptersToDownload(manga)
