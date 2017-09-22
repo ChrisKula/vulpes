@@ -78,8 +78,6 @@ class MangaFoxReleaseFetcher : ReleaseFetcher() {
                     updatedManga.chapters.add(chapter)
                 }
             }
-
-            Thread.sleep(MangaFoxQuirks.DELAY_BETWEEN_HTTP_REQUESTS_MS)
         }
 
         return updatedManga
@@ -91,23 +89,21 @@ class MangaFoxReleaseFetcher : ReleaseFetcher() {
 
     private fun fetchPageCount(chapter: Chapter): Int {
         val chapterFirstPage: Document
+        var pageCount = -1
+
         try {
             chapterFirstPage = JSOUP_HTML_CONNECTION.url(chapter.url).get()
-        } catch (e1: IOException) {
-            val error = "Couldn't retrieve the number of pages of this chapter : " + chapter.chapterNumber
-            System.err.println("[ERROR] " + error)
-            return -1
-        }
+            pageCount = chapterFirstPage.getElementsByTag("option").size / 2 - 1
 
-        val e = chapterFirstPage.getElementsByTag("option")
-        val pagesCount = e.size / 2 - 1
-
-        if (pagesCount <= 0) {
-            val error = "Couldn't retrieve the number of pages of this chapter : " + chapter.chapterNumber + ". Keep in mind in can be a problem on mangafox.me's side."
-            println("[ERROR] " + error)
-            return -1
-        } else {
-            return pagesCount
+            if (pageCount <= 0) {
+                System.err.println("[ERROR] Couldn't retrieve the page count for chapter ${chapter.chapterNumber}")
+                pageCount = -1
+            }
+        } catch (ioe: IOException) {
+            System.err.println("[ERROR] Couldn't retrieve the page count for chapter ${chapter.chapterNumber} (${ioe.localizedMessage})")
+        } finally {
+            Thread.sleep(MangaFoxQuirks.DELAY_BETWEEN_HTTP_REQUESTS_MS)
+            return pageCount
         }
     }
 }
