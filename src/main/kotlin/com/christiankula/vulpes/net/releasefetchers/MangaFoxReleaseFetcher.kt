@@ -19,8 +19,8 @@ class MangaFoxReleaseFetcher : ReleaseFetcher() {
     private val BASE_MANGA_URL = "https://mangafox.me/manga/%s"
     private val BASE_RSS_URL = "https://mangafox.me/rss/%s.xml"
 
-    private val JSOUP_HTML_CONNECTION = ConnectionFactory.createJsoupConnection(BASE_MANGAFOX_URL, Parser.htmlParser())
-    private val JSOUP_XML_CONNECTION = ConnectionFactory.createJsoupConnection(BASE_MANGAFOX_URL, Parser.xmlParser())
+    private val JSOUP_HTML_CONNECTION = ConnectionFactory.newJsoupConnection(BASE_MANGAFOX_URL, Parser.htmlParser())
+    private val JSOUP_XML_CONNECTION = ConnectionFactory.newJsoupConnection(BASE_MANGAFOX_URL, Parser.xmlParser())
 
     override fun fetchReleases(manga: Manga): Manga {
         val updatedManga = manga.copy(url = String.format(BASE_MANGA_URL,
