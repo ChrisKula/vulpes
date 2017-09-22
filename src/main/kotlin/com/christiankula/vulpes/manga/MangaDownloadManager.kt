@@ -22,14 +22,17 @@ class MangaDownloadManager(var manga: Manga) {
     }
 
     fun downloadChapter(volume: String, chapterNumber: String) {
+        println("[START] Starting downloading/updating chapter $chapterNumber (volume $volume) of manga ${manga.name}.")
         downloader.downloadChapter(manga, volume, chapterNumber)
     }
 
     fun downloadVolume(volume: String) {
+        println("[START] Starting downloading/updating volume $volume of manga ${manga.name}.")
         downloader.downloadVolume(manga, volume)
     }
 
     fun downloadManga() {
+        println("[START] Starting downloading/updating manga ${manga.name}.")
         downloader.downloadManga(manga)
     }
 }
