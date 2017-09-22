@@ -1,4 +1,4 @@
-package com.christiankula.vulpes.net.downloaders
+package com.christiankula.vulpes.net.download
 
 import com.christiankula.vulpes.file.filters.ImageFileFilter
 import com.christiankula.vulpes.manga.models.Chapter
@@ -12,11 +12,12 @@ import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
-abstract class Downloader {
-    private val VOLUME_FOLDER = "v_"
-    private val CHAPTER_FOLDER = "ch_"
+private const val VOLUME_FOLDER = "v_"
+private const val CHAPTER_FOLDER = "ch_"
 
-    private val TIMEOUT_IN_MILLIS = 5000
+private const val TIMEOUT_IN_MILLIS = 5000
+
+abstract class Downloader {
 
     private val THREAD_POOL_SIZE: Int = Runtime.getRuntime().availableProcessors() - 1
     private val executorService: ExecutorService = Executors.newFixedThreadPool(THREAD_POOL_SIZE)
@@ -39,7 +40,7 @@ abstract class Downloader {
         val chaptersToDownload = getChaptersToDownload(manga)
 
         return if (chaptersToDownload.isEmpty()) {
-            System.out.println("[UP TO DATE] The manga " + manga.name.toUpperCase() + " is up to date.")
+            System.out.println("[UP TO DATE] The manga " + manga.name.toUpperCase() + " is up to date")
             false
         } else {
             downloadChapters(manga, chaptersToDownload)
@@ -57,7 +58,7 @@ abstract class Downloader {
         }
 
         return if (chapters.isEmpty()) {
-            System.err.println("[ERR] Volume $volumeNumber not downloaded : no chapters found not found for the manga ${manga.name}")
+            System.err.println("[ERR] Volume $volumeNumber not downloaded : no found for the manga ${manga.name}")
             false
         } else {
             downloadChapters(manga, chapters)

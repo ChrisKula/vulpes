@@ -1,4 +1,4 @@
-package com.christiankula.vulpes.net.downloaders
+package com.christiankula.vulpes.net.download
 
 import com.christiankula.vulpes.manga.models.Chapter
 import com.christiankula.vulpes.manga.models.Manga
