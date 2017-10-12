@@ -6,6 +6,7 @@ import com.christiankula.vulpes.cli.Cli
 import com.christiankula.vulpes.manga.MangaDownloadManager
 import com.christiankula.vulpes.manga.models.Manga
 import com.christiankula.vulpes.manga.models.Source
+import com.christiankula.vulpes.quirks.MangaFoxQuirks
 import com.christiankula.vulpes.utils.StringUtils
 
 val cli = Cli()
@@ -34,6 +35,10 @@ fun main(args: Array<String>) {
     if (cli.source == null) {
         println("[INFO] No source specified, defaulted to MangaFox\n")
         cli.source = Source.MANGA_FOX
+    }
+
+    if (cli.source == Source.MANGA_FOX) {
+        MangaFoxQuirks.ignoreInvalidSslCertificates()
     }
 
     if (cli.chapter != null && cli.volume == null) {
