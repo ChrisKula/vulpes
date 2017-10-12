@@ -3,6 +3,7 @@ package com.christiankula.vulpes.net.releasefetchers
 import com.christiankula.vulpes.manga.models.Chapter
 import com.christiankula.vulpes.manga.models.Manga
 import com.christiankula.vulpes.net.connection.ConnectionFactory
+import com.christiankula.vulpes.quirks.MangaFoxQuirks
 import com.christiankula.vulpes.utils.StringUtils
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
@@ -78,10 +79,7 @@ class MangaFoxReleaseFetcher : ReleaseFetcher() {
                 }
             }
 
-            // Because of how MangaFox handles incomings requests incoming in a short period,
-            // fetching page counts can't be parallelized and a small delay is necessary.
-            // Same applies for page downloading, thus making MangaFox crawling very slow
-            Thread.sleep(150)
+            Thread.sleep(MangaFoxQuirks.DELAY_BETWEEN_HTTP_REQUESTS_MS)
         }
 
         return updatedManga
