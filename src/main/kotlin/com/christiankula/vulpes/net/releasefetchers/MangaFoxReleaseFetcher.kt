@@ -14,9 +14,9 @@ class MangaFoxReleaseFetcher : ReleaseFetcher() {
     private val VOLUME_NOT_AVAILABLE = "NA"
     private val CHAPTER_NOT_AVAILABLE = "NA"
 
-    private val BASE_MANGAFOX_URL = "http://mangafox.me"
-    private val BASE_MANGA_URL = "http://mangafox.me/manga/%s"
-    private val BASE_RSS_URL = "http://mangafox.me/rss/%s.xml"
+    private val BASE_MANGAFOX_URL = "https://mangafox.me"
+    private val BASE_MANGA_URL = "https://mangafox.me/manga/%s"
+    private val BASE_RSS_URL = "https://mangafox.me/rss/%s.xml"
 
     private val JSOUP_HTML_CONNECTION = ConnectionFactory.createJsoupConnection(BASE_MANGAFOX_URL, Parser.htmlParser())
     private val JSOUP_XML_CONNECTION = ConnectionFactory.createJsoupConnection(BASE_MANGAFOX_URL, Parser.xmlParser())
