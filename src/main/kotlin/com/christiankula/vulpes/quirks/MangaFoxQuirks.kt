@@ -13,7 +13,7 @@ class MangaFoxQuirks private constructor() {
          * thus fetching page counts can't be parallelized and a small delay between requests is necessary.
          * Same applies for page downloading, thus making MangaFox crawling very slow.
          */
-        val DELAY_BETWEEN_HTTP_REQUESTS_MS: Long = 150
+        val DELAY_BETWEEN_HTTP_REQUESTS_MS: Long = 200
 
         fun ignoreInvalidSslCertificates() {
             val a = object : X509TrustManager {
