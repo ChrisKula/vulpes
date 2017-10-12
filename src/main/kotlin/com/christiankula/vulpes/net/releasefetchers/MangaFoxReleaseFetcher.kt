@@ -63,7 +63,13 @@ class MangaFoxReleaseFetcher : ReleaseFetcher() {
                 chapterNumber = matcher.group(1).replaceFirst("^0+(?!$)".toRegex(), "")
             }
 
-            var chapter = Chapter(volumeNumber, chapterNumber, 0, element.getElementsByTag("link")[0].ownText())
+            var chapterUrl = element.getElementsByTag("link")[0].ownText()
+
+            if (chapterUrl.startsWith("//")) {
+                chapterUrl = "https:" + chapterUrl
+            }
+
+            var chapter = Chapter(volumeNumber, chapterNumber, 0, chapterUrl)
 
             if (!manga.chapters.contains(chapter)) {
                 chapter = chapter.copy(pageCount = fetchPageCount(chapter))
