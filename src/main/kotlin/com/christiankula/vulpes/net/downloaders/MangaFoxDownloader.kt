@@ -3,13 +3,14 @@ package com.christiankula.vulpes.net.downloaders
 import com.christiankula.vulpes.manga.models.Chapter
 import com.christiankula.vulpes.manga.models.Manga
 import com.christiankula.vulpes.net.connection.ConnectionFactory
+import com.christiankula.vulpes.quirks.MangaFoxQuirks
 import org.jsoup.parser.Parser
 
 class MangaFoxDownloader : Downloader() {
     override fun downloadChapters(manga: Manga, chapters: Set<Chapter>) {
         for (chapter in chapters) {
             downloadChapterIfNeeded(manga, chapter)
-            Thread.sleep(200)
+            Thread.sleep(MangaFoxQuirks.DELAY_BETWEEN_HTTP_REQUESTS_MS)
         }
     }
 
@@ -26,7 +27,7 @@ class MangaFoxDownloader : Downloader() {
 
                 downloadImageToDisk(manga, chapter, imgUrl, pageNumber)
 
-                Thread.sleep(200)
+                Thread.sleep(MangaFoxQuirks.DELAY_BETWEEN_HTTP_REQUESTS_MS)
             }
         }
 

@@ -3,6 +3,7 @@ package com.christiankula.vulpes.net.releasefetchers
 import com.christiankula.vulpes.manga.models.Chapter
 import com.christiankula.vulpes.manga.models.Manga
 import com.christiankula.vulpes.net.connection.ConnectionFactory
+import com.christiankula.vulpes.quirks.MangaFoxQuirks
 import com.christiankula.vulpes.utils.StringUtils
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
@@ -14,9 +15,9 @@ class MangaFoxReleaseFetcher : ReleaseFetcher() {
     private val VOLUME_NOT_AVAILABLE = "NA"
     private val CHAPTER_NOT_AVAILABLE = "NA"
 
-    private val BASE_MANGAFOX_URL = "http://mangafox.me"
-    private val BASE_MANGA_URL = "http://mangafox.me/manga/%s"
-    private val BASE_RSS_URL = "http://mangafox.me/rss/%s.xml"
+    private val BASE_MANGAFOX_URL = "https://mangafox.me"
+    private val BASE_MANGA_URL = "https://mangafox.me/manga/%s"
+    private val BASE_RSS_URL = "https://mangafox.me/rss/%s.xml"
 
     private val JSOUP_HTML_CONNECTION = ConnectionFactory.createJsoupConnection(BASE_MANGAFOX_URL, Parser.htmlParser())
     private val JSOUP_XML_CONNECTION = ConnectionFactory.createJsoupConnection(BASE_MANGAFOX_URL, Parser.xmlParser())
@@ -63,7 +64,13 @@ class MangaFoxReleaseFetcher : ReleaseFetcher() {
                 chapterNumber = matcher.group(1).replaceFirst("^0+(?!$)".toRegex(), "")
             }
 
-            var chapter = Chapter(volumeNumber, chapterNumber, 0, element.getElementsByTag("link")[0].ownText())
+            var chapterUrl = element.getElementsByTag("link")[0].ownText()
+
+            if (chapterUrl.startsWith("//")) {
+                chapterUrl = "https:" + chapterUrl
+            }
+
+            var chapter = Chapter(volumeNumber, chapterNumber, 0, chapterUrl)
 
             if (!manga.chapters.contains(chapter)) {
                 chapter = chapter.copy(pageCount = fetchPageCount(chapter))
@@ -72,10 +79,7 @@ class MangaFoxReleaseFetcher : ReleaseFetcher() {
                 }
             }
 
-            // Because of how MangaFox handles incomings requests incoming in a short period,
-            // fetching page counts can't be parallelized and a small delay is necessary.
-            // Same applies for page downloading, thus making MangaFox crawling very slow
-            Thread.sleep(150)
+            Thread.sleep(MangaFoxQuirks.DELAY_BETWEEN_HTTP_REQUESTS_MS)
         }
 
         return updatedManga
