@@ -1,7 +1,7 @@
 package com.christiankula.vulpes.file.json
 
 import com.christiankula.vulpes.manga.models.Manga
-import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.google.gson.JsonIOException
 import com.google.gson.JsonSyntaxException
 import org.apache.commons.io.FileUtils
@@ -11,6 +11,8 @@ import java.nio.charset.Charset
 
 class JsonMangaFileManager private constructor() {
     companion object {
+        private val gson = GsonBuilder().setPrettyPrinting().create()
+
         private fun getMangaJsonFile(manga: Manga): File {
             return File("${manga.name}${File.separator}${manga.name.toLowerCase()}.json")
         }
@@ -22,7 +24,7 @@ class JsonMangaFileManager private constructor() {
 
             if (mangaJsonFile.exists()) {
                 try {
-                    mangaFromJson = Gson().fromJson(mangaJsonFile.reader(), Manga::class.java)
+                    mangaFromJson = gson.fromJson(mangaJsonFile.reader(), Manga::class.java)
                 } catch (i: JsonIOException) {
                     System.err.println("[ERROR] Error while parsing the JSON file.")
                     System.exit(20)
@@ -45,7 +47,7 @@ class JsonMangaFileManager private constructor() {
 
         fun writeToJsonFile(manga: Manga) {
             try {
-                FileUtils.writeStringToFile(getMangaJsonFile(manga), Gson().toJson(manga), Charset.forName("UTF-8"))
+                FileUtils.writeStringToFile(getMangaJsonFile(manga), gson.toJson(manga), Charset.forName("UTF-8"))
             } catch (e: IOException) {
                 System.err.println("[ERROR] Unable to write to the JSON file.")
                 System.err.println(e.message)
