@@ -1,10 +1,9 @@
 package com.christiankula.vulpes.manga.models
 
+import com.christiankula.vulpes.manga.VOLUME_NOT_AVAILABLE
+import com.christiankula.vulpes.manga.VOLUME_TO_BE_DETERMINED
 import com.google.gson.annotations.SerializedName
 
-const val VOLUME_NOT_AVAILABLE = "NA"
-
-const val VOLUME_TO_BE_DETERMINED = "TBD"
 
 data class Chapter(@SerializedName("volume") val associatedVolume: String, @SerializedName("chapter") val chapterNumber: String, val pageCount: Int, val url: String) : Comparable<Chapter> {
 

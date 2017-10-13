@@ -1,5 +1,7 @@
 package com.christiankula.vulpes.net.releasefetchers
 
+import com.christiankula.vulpes.manga.CHAPTER_NOT_AVAILABLE
+import com.christiankula.vulpes.manga.VOLUME_NOT_AVAILABLE
 import com.christiankula.vulpes.manga.models.Chapter
 import com.christiankula.vulpes.manga.models.Manga
 import com.christiankula.vulpes.net.connection.ConnectionFactory
@@ -14,9 +16,6 @@ import java.util.regex.Pattern
 class MangaFoxReleaseFetcher : ReleaseFetcher() {
 
     companion object {
-        private const val CHAPTER_NOT_AVAILABLE = "NA"
-        private const val VOLUME_NOT_AVAILABLE = "NA"
-
         private const val BASE_MANGAFOX_URL = "https://mangafox.me"
         private const val BASE_MANGA_URL = "https://mangafox.me/manga/%s"
         private const val BASE_RSS_URL = "https://mangafox.me/rss/%s.xml"
@@ -51,8 +50,8 @@ class MangaFoxReleaseFetcher : ReleaseFetcher() {
         rssChapters.forEach { element: Element ->
             val title = element.getElementsByTag("title")[0].ownText()
 
-            var volumeNumber = Companion.VOLUME_NOT_AVAILABLE
-            var chapterNumber = Companion.CHAPTER_NOT_AVAILABLE
+            var volumeNumber = VOLUME_NOT_AVAILABLE
+            var chapterNumber = CHAPTER_NOT_AVAILABLE
 
             var pattern = Pattern.compile("Vol ([0-9.TBD]+)")
             var matcher = pattern.matcher(title)
