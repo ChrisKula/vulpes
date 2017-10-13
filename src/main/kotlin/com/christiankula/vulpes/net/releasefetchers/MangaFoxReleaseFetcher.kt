@@ -12,26 +12,30 @@ import java.io.IOException
 import java.util.regex.Pattern
 
 class MangaFoxReleaseFetcher : ReleaseFetcher() {
-    private val VOLUME_NOT_AVAILABLE = "NA"
-    private val CHAPTER_NOT_AVAILABLE = "NA"
 
-    private val BASE_MANGAFOX_URL = "https://mangafox.me"
-    private val BASE_MANGA_URL = "https://mangafox.me/manga/%s"
-    private val BASE_RSS_URL = "https://mangafox.me/rss/%s.xml"
+    companion object {
+        private const val CHAPTER_NOT_AVAILABLE = "NA"
+        private const val VOLUME_NOT_AVAILABLE = "NA"
 
-    private val JSOUP_HTML_CONNECTION = ConnectionFactory.newJsoupConnection(BASE_MANGAFOX_URL, Parser.htmlParser())
-    private val JSOUP_XML_CONNECTION = ConnectionFactory.newJsoupConnection(BASE_MANGAFOX_URL, Parser.xmlParser())
+        private const val BASE_MANGAFOX_URL = "https://mangafox.me"
+        private const val BASE_MANGA_URL = "https://mangafox.me/manga/%s"
+        private const val BASE_RSS_URL = "https://mangafox.me/rss/%s.xml"
+
+        private val JSOUP_HTML_CONNECTION = ConnectionFactory.newJsoupConnection(BASE_MANGAFOX_URL, Parser.htmlParser())
+        private val JSOUP_XML_CONNECTION = ConnectionFactory.newJsoupConnection(BASE_MANGAFOX_URL, Parser.xmlParser())
+    }
+
 
     override fun fetchReleases(manga: Manga): Manga {
-        val updatedManga = manga.copy(url = String.format(BASE_MANGA_URL,
+        val updatedManga = manga.copy(url = String.format(Companion.BASE_MANGA_URL,
                 transformToMangaFoxRssName(manga.name)))
 
-        val rssUrl = String.format(BASE_RSS_URL, transformToMangaFoxRssName(manga.name))
+        val rssUrl = String.format(Companion.BASE_RSS_URL, transformToMangaFoxRssName(manga.name))
 
         var rssRootElement: Element? = null
 
         try {
-            rssRootElement = JSOUP_XML_CONNECTION.url(rssUrl).get().getElementsByTag("rss")[0]
+            rssRootElement = Companion.JSOUP_XML_CONNECTION.url(rssUrl).get().getElementsByTag("rss")[0]
         } catch (e: IOException) {
             System.err.println("[ERROR] Couldn't connect to mangafox.me. " +
                     "Check your Internet connection. Keep in mind that mangafox.me may be down.")
@@ -47,8 +51,8 @@ class MangaFoxReleaseFetcher : ReleaseFetcher() {
         rssChapters.forEach { element: Element ->
             val title = element.getElementsByTag("title")[0].ownText()
 
-            var volumeNumber = VOLUME_NOT_AVAILABLE
-            var chapterNumber = CHAPTER_NOT_AVAILABLE
+            var volumeNumber = Companion.VOLUME_NOT_AVAILABLE
+            var chapterNumber = Companion.CHAPTER_NOT_AVAILABLE
 
             var pattern = Pattern.compile("Vol ([0-9.TBD]+)")
             var matcher = pattern.matcher(title)
@@ -70,12 +74,12 @@ class MangaFoxReleaseFetcher : ReleaseFetcher() {
                 chapterUrl = "https:" + chapterUrl
             }
 
-            var chapter = Chapter(volumeNumber, chapterNumber, 0, chapterUrl)
+            val chapter = Chapter(volumeNumber, chapterNumber, 0, chapterUrl)
 
             if (!manga.chapters.contains(chapter)) {
-                chapter = chapter.copy(pageCount = fetchPageCount(chapter))
-                if (chapter.pageCount > 0) {
-                    updatedManga.chapters.add(chapter)
+                val pageCount = fetchPageCount(chapter)
+                if (pageCount > 0) {
+                    updatedManga.chapters.add(chapter.copy(pageCount = pageCount))
                 }
             }
         }
@@ -92,12 +96,11 @@ class MangaFoxReleaseFetcher : ReleaseFetcher() {
         var pageCount = -1
 
         try {
-            chapterFirstPage = JSOUP_HTML_CONNECTION.url(chapter.url).get()
+            chapterFirstPage = Companion.JSOUP_HTML_CONNECTION.url(chapter.url).get()
             pageCount = chapterFirstPage.getElementsByTag("option").size / 2 - 1
 
             if (pageCount <= 0) {
                 System.err.println("[ERROR] Couldn't retrieve the page count for chapter ${chapter.chapterNumber}")
-                pageCount = -1
             }
         } catch (ioe: IOException) {
             System.err.println("[ERROR] Couldn't retrieve the page count for chapter ${chapter.chapterNumber} (${ioe.localizedMessage})")
