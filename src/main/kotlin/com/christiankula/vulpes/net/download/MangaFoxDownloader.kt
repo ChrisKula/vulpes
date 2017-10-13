@@ -1,4 +1,4 @@
-package com.christiankula.vulpes.net.downloaders
+package com.christiankula.vulpes.net.download
 
 import com.christiankula.vulpes.manga.models.Chapter
 import com.christiankula.vulpes.manga.models.Manga
@@ -20,7 +20,7 @@ class MangaFoxDownloader : Downloader() {
         for (pageNumber in 1..chapter.pageCount) {
             val pageUrl = String.format(pageUrlModel, pageNumber)
 
-            val page = ConnectionFactory.createJsoupConnection(pageUrl, Parser.htmlParser()).get()
+            val page = ConnectionFactory.newJsoupConnection(pageUrl, Parser.htmlParser()).get()
 
             if (page.hasText()) {
                 val imgUrl = page.getElementById("viewer").getElementsByTag("img")[0].attr("src")

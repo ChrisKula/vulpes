@@ -2,7 +2,7 @@ package com.christiankula.vulpes.manga
 
 import com.christiankula.vulpes.file.json.JsonMangaFileManager
 import com.christiankula.vulpes.manga.models.Manga
-import com.christiankula.vulpes.net.downloaders.Downloader
+import com.christiankula.vulpes.net.download.Downloader
 import com.christiankula.vulpes.net.releasefetchers.ReleaseFetcher
 
 class MangaDownloadManager(var manga: Manga) {
