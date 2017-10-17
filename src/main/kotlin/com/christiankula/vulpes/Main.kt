@@ -13,7 +13,7 @@ val cli = Cli()
 
 val jCommander = JCommander.newBuilder()
         .addObject(cli)
-        .programName("java -jar vulpes.jar")
+        .programName(Cli.PROGRAM_NAME)
         .build()!!
 
 fun main(args: Array<String>) {
