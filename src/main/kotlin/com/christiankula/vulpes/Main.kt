@@ -32,6 +32,13 @@ fun main(args: Array<String>) {
         printVersionAndExit()
     }
 
+    if (cli.chapter != null && cli.volume == null) {
+        System.err.println("[ERROR] When specifying a chapter, you must also specify a volume as some " +
+                "mangas have multiple chapters with the same number, e.g. 'Detective Conan'.")
+
+        System.exit(11)
+    }
+
     if (cli.source == null) {
         println("[INFO] No source specified, defaulted to MangaFox\n")
         cli.source = Source.MANGA_FOX
@@ -39,13 +46,6 @@ fun main(args: Array<String>) {
 
     if (cli.source == Source.MANGA_FOX) {
         MangaFoxQuirks.ignoreInvalidSslCertificates()
-    }
-
-    if (cli.chapter != null && cli.volume == null) {
-        System.err.println("[ERROR] When specifying a chapter, you must also specify a volume as some " +
-                "mangas have multiple chapters with the same number, e.g. 'Detective Conan'.")
-
-        System.exit(11)
     }
 
     val mangaDownloadManager = MangaDownloadManager(Manga(name = StringUtils.clean(cli.mangaName!!.capitalize()), source = cli.source!!))
