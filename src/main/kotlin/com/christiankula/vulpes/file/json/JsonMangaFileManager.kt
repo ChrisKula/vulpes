@@ -32,7 +32,7 @@ class JsonMangaFileManager private constructor() {
                 } catch (jioe: JsonIOException) {
                     CliUtils.printErrorAndExit(Error.JSON_MANAGER_ERROR_WHILE_READING_JSON_FILE)
                 } catch (jse: JsonSyntaxException) {
-                    Log.w(Warning.JSON_MANAGER_INVALID_JSON_CREATE_NEW_ONE.message)
+                    Log.w(Warning.JSON_MANAGER_INVALID_JSON_FILE_CREATE_NEW_ONE.message)
                 }
 
                 if (mangaFromJson != null) {
