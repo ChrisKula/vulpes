@@ -4,6 +4,8 @@ import com.beust.jcommander.JCommander
 import com.beust.jcommander.ParameterException
 import com.christiankula.vulpes.cli.Cli
 import com.christiankula.vulpes.cli.CliUtils
+import com.christiankula.vulpes.cli.messages.Error
+import com.christiankula.vulpes.cli.messages.Warning
 import com.christiankula.vulpes.log.Log
 import com.christiankula.vulpes.manga.MangaDownloadManager
 import com.christiankula.vulpes.manga.models.Manga
@@ -22,7 +24,7 @@ fun main(args: Array<String>) {
     try {
         jCommander.parse(*args)
     } catch (e: ParameterException) {
-        CliUtils.printErrorAndExit(10, "Incorrect parameters. Please use -h option to show usage")
+        CliUtils.printErrorAndExit(Error.MAIN_INCORRECT_PARAMETERS)
     }
 
     if (cli.help) {
@@ -34,12 +36,11 @@ fun main(args: Array<String>) {
     }
 
     if (cli.chapter != null && cli.volume == null) {
-        CliUtils.printErrorAndExit(11, "When specifying a chapter, you must also specify a volume as " +
-                "some mangas have multiple chapters with the same number, e.g. 'Detective Conan'.")
+        CliUtils.printErrorAndExit(Error.MAIN_VOLUME_REQUIRED_WHEN_DOWNLOADING_CHAPTER)
     }
 
     if (cli.source == null) {
-        Log.w("No source specified, defaulted to MangaFox")
+        Log.w(Warning.MAIN_SOURCE_DEFAULTED_TO_MANGA_FOX.message)
         cli.source = Source.MANGA_FOX
     }
 
