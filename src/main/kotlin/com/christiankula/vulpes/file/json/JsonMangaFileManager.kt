@@ -1,5 +1,9 @@
 package com.christiankula.vulpes.file.json
 
+import com.christiankula.vulpes.cli.CliUtils
+import com.christiankula.vulpes.cli.messages.Error
+import com.christiankula.vulpes.cli.messages.Warning
+import com.christiankula.vulpes.log.Log
 import com.christiankula.vulpes.manga.models.Manga
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonIOException
@@ -25,19 +29,16 @@ class JsonMangaFileManager private constructor() {
             if (mangaJsonFile.exists()) {
                 try {
                     mangaFromJson = gson.fromJson(mangaJsonFile.reader(), Manga::class.java)
-                } catch (i: JsonIOException) {
-                    System.err.println("[ERROR] Error while parsing the JSON file.")
-                    System.exit(20)
-                } catch (i: JsonSyntaxException) {
-                    System.err.println("[WARN] JSON file is not correctly structured. A new one will be created.")
+                } catch (jioe: JsonIOException) {
+                    CliUtils.printErrorAndExit(Error.JSON_MANAGER_ERROR_WHILE_READING_JSON_FILE)
+                } catch (jse: JsonSyntaxException) {
+                    Log.w(Warning.JSON_MANAGER_INVALID_JSON_FILE_CREATE_NEW_ONE.message)
                 }
 
                 if (mangaFromJson != null) {
                     if (manga.source != mangaFromJson.source) {
-                        System.err.println("[ERROR] The provided source is different than the one previously provided. "
-                                + "Please continue downloading with " + manga.source
-                                + " or start from scratch with another source.")
-                        System.exit(21)
+                        val error = Error.JSON_MANAGER_PROVIDED_SOURCE_DIFFERENT_THAN_PREVIOUSLY_PROVIDED
+                        CliUtils.printErrorAndExit(error.code, String.format(error.message, manga.source))
                     }
                 }
             }
@@ -48,12 +49,10 @@ class JsonMangaFileManager private constructor() {
         fun writeToJsonFile(manga: Manga) {
             try {
                 FileUtils.writeStringToFile(getMangaJsonFile(manga), gson.toJson(manga), Charset.forName("UTF-8"))
-            } catch (e: IOException) {
-                System.err.println("[ERROR] Unable to write to the JSON file.")
-                System.err.println(e.message)
-                System.exit(22)
+            } catch (ioe: IOException) {
+                val error = Error.JSON_MANAGER_UNABLE_TO_WRITE_TO_JSON_FILE
+                CliUtils.printErrorAndExit(error.code, String.format(error.message, ioe.message))
             }
-
         }
     }
 }

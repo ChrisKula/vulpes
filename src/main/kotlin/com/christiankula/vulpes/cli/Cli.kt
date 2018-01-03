@@ -6,6 +6,10 @@ import com.christiankula.vulpes.manga.models.Source
 
 
 class Cli {
+    companion object {
+        const val PROGRAM_NAME = "java -jar vulpes.jar"
+    }
+
     @Parameter(description = "Name of the manga to download", required = true)
     var mangaName: String? = null
 
