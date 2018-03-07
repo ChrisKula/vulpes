@@ -21,6 +21,7 @@ class ConnectionFactory {
                     .header("Accept-Charset", HEADER_ACCEPT_CHARSET)
                     .header("Accept-language", HEADER_LANGUAGE)
                     .header("keep-alive", HEADER_KEEP_ALIVE)
+                    .followRedirects(true)
                     .parser(parser)
         }
     }
