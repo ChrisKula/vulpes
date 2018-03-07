@@ -4,3 +4,5 @@ build
 out
 *.jpg
 *.json
+*.iml
+.DS_Store
