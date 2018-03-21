@@ -16,9 +16,9 @@ import java.util.regex.Pattern
 class MangaFoxReleaseFetcher : ReleaseFetcher() {
 
     companion object {
-        private const val BASE_MANGAFOX_URL = "https://mangafox.me"
-        private const val BASE_MANGA_URL = "https://mangafox.me/manga/%s"
-        private const val BASE_RSS_URL = "https://mangafox.me/rss/%s.xml"
+        private const val BASE_MANGAFOX_URL = "http://mangafox.me"
+        private const val BASE_MANGA_URL = BASE_MANGAFOX_URL + "/manga/%s"
+        private const val BASE_RSS_URL = BASE_MANGAFOX_URL + "/rss/%s.xml"
 
         private val JSOUP_HTML_CONNECTION = ConnectionFactory.newJsoupConnection(BASE_MANGAFOX_URL, Parser.htmlParser())
         private val JSOUP_XML_CONNECTION = ConnectionFactory.newJsoupConnection(BASE_MANGAFOX_URL, Parser.xmlParser())
@@ -67,11 +67,7 @@ class MangaFoxReleaseFetcher : ReleaseFetcher() {
                 chapterNumber = matcher.group(1).replaceFirst("^0+(?!$)".toRegex(), "")
             }
 
-            var chapterUrl = element.getElementsByTag("link")[0].ownText()
-
-            if (chapterUrl.startsWith("//")) {
-                chapterUrl = "https:" + chapterUrl
-            }
+            val chapterUrl = formatChapterUrl(element.getElementsByTag("link")[0].ownText())
 
             val chapter = Chapter(volumeNumber, chapterNumber, 0, chapterUrl)
 
@@ -88,6 +84,14 @@ class MangaFoxReleaseFetcher : ReleaseFetcher() {
 
     private fun transformToMangaFoxRssName(mangaName: String): String {
         return StringUtils.stripAccents(mangaName).replace(" ".toRegex(), "_").toLowerCase()
+    }
+
+    private fun formatChapterUrl(chapterUrlFromHtmlTag: String): String {
+        if (chapterUrlFromHtmlTag.startsWith("//")) {
+            return "http:$chapterUrlFromHtmlTag"
+        }
+
+        return chapterUrlFromHtmlTag
     }
 
     private fun fetchPageCount(chapter: Chapter): Int {

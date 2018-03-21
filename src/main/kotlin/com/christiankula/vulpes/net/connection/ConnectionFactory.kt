@@ -11,8 +11,6 @@ private const val HEADER_ACCEPT_CHARSET = "ISO-8859-1,utf-8;q=0.7,*;q=0.3"
 private const val HEADER_LANGUAGE = "en-US,en;q=0.8"
 private const val HEADER_KEEP_ALIVE = "keep-alive"
 
-private const val TIME_OUT_IN_MILLIS = 5000
-
 class ConnectionFactory {
 
     companion object {
@@ -23,7 +21,7 @@ class ConnectionFactory {
                     .header("Accept-Charset", HEADER_ACCEPT_CHARSET)
                     .header("Accept-language", HEADER_LANGUAGE)
                     .header("keep-alive", HEADER_KEEP_ALIVE)
-                    .timeout(TIME_OUT_IN_MILLIS)
+                    .followRedirects(true)
                     .parser(parser)
         }
     }
