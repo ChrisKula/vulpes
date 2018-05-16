@@ -4,18 +4,15 @@ import com.christiankula.vulpes.file.filters.ImageFileFilter
 import com.christiankula.vulpes.manga.models.Chapter
 import com.christiankula.vulpes.manga.models.Manga
 import com.christiankula.vulpes.manga.models.Source
-import org.apache.commons.io.FileUtils
+import com.christiankula.vulpes.utils.FileUtils
 import java.io.File
 import java.io.IOException
-import java.net.URL
-import java.util.*
+import java.util.TreeSet
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 private const val VOLUME_FOLDER = "v_"
 private const val CHAPTER_FOLDER = "ch_"
-
-private const val TIMEOUT_IN_MILLIS = 5000
 
 abstract class Downloader {
 
@@ -128,7 +125,7 @@ abstract class Downloader {
             if (file.exists()) {
                 file.delete()
             }
-            FileUtils.copyURLToFile(URL(imgUrl), file, TIMEOUT_IN_MILLIS, TIMEOUT_IN_MILLIS)
+            FileUtils.copyUrlToFile(imgUrl, file)
         } catch (ioe: IOException) {
             file.delete()
         }
