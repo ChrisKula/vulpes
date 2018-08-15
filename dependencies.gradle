@@ -1,0 +1,20 @@
+ext {
+    librariesVersions = [
+            kotlin: kotlin_version
+    ]
+
+    libraries = [
+            /** https://github.com/JetBrains/kotlin */
+            kotlinStdLib: "org.jetbrains.kotlin:kotlin-stdlib:$librariesVersions.kotlin"
+
+    ]
+
+    testLibrariesVersions = [
+            junit: "4.12"
+    ]
+
+    testLibraries = [
+            /** https://github.com/junit-team/junit4 */
+            junit: "junit:junit:$testLibrariesVersions.junit"
+    ]
+}
